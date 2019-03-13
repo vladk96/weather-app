@@ -2,6 +2,8 @@ import Component from '../../framework/Component';
 import { SearchBar } from '../SearchBar/';
 import { CurrentWeather } from '../CurrentWeather/';
 import { WeatherForecast } from '../WeatherForecast/';
+import { FavouriteLocations } from '../FavouriteLocations/';
+import { SearchHistory } from '../SearchHistory/';
 import { weatherImages } from '../../images';
 
 export default class App extends Component {
@@ -63,9 +65,50 @@ export default class App extends Component {
               ],
             },
           },
+          {
+            tag: 'section',
+            classList: ['lists'],
+            children: [
+              {
+                tag: FavouriteLocations,
+                props: {
+                  favoriteCities: [
+                    {
+                      location: 'Zhytomyr, Zhytomyr Oblast, Ukraine, 10000',
+                    },
+                    {
+                      location: 'Kyiv, Ukraine, 02000',
+                    },
+                    {
+                      location: 'Redmond, WA, USA',
+                    },
+                    {
+                      location: 'Kyiv, Ukraine, 02000',
+                    },
+                  ],
+                },
+              },
+              {
+                tag: SearchHistory,
+                props: {
+                  historyCities: [
+                    {
+                      location: 'Redmond, WA, USA',
+                    },
+                    {
+                      location: 'Kyiv, Ukraine, 02000',
+                    },
+                    {
+                      location: 'Zhytomyr, Zhytomyr Oblast, Ukraine, 10000',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
         ]
       }
     ];
   }
-  
+
 }
