@@ -2,3 +2,11 @@
 @import 'base/font-iconmoon';
 @import 'base/fonts';
 @import 'base/variables';
+
+@import 'components/app-content';
+@import 'components/search-bar';
+
+body {
+  font-family: 'raleway-regular', sans-serif;
+  background-color: $back-color;
+}
