@@ -16,7 +16,7 @@
     "publish": "push-dir --dir=dist --branch=gh-pages"
   },
   "devDependencies": {
-    "sass": "^1.17.2",
+    "sass": "^1.17.3",
     "shx": "^0.3.2"
   }
 }
