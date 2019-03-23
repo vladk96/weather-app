@@ -1,11 +1,36 @@
 import Component from '../../framework/Component';
+import WeatherDataService from '../../Services/WeatherDataService';
 
 export default class CurrentWeather extends Component {
   constructor(host, props) {
     super(host, props);
   }
   
+  init() {
+    this.state = {
+      currentWeather: null,
+    };
+
+    WeatherDataService
+      .getCurrentWeather(this.props.cityName)
+      .then(data => {
+        this.updateState({
+          currentWeather: data,
+        });
+      });
+  }
+
   render() {
+    console.log(this.state);
+    if (this.state.currentWeather === null) {
+      return [
+        {
+          tag: 'section',
+          classList: ['today-weather'],
+          content: 'Nothing',
+        },
+      ];
+    }
     return [
       {
         tag: 'section',

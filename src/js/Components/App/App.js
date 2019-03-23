@@ -20,7 +20,7 @@ export default class App extends Component {
           { tag: SearchBar },
           { tag: CurrentWeather,
             props: {
-              cityName: 'Bangalore, IN',
+              cityName: 'London, uk',
               date: '2019-03-06',
               weatherDesc: 'Thunderstorms',
               weatherImage: weatherImages.thunderstorm,
