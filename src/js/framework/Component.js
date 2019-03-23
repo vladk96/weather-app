@@ -48,7 +48,8 @@ export default class Component {
     } else {
       if (element.tag) {
         if (typeof element.tag === 'function') {
-          const container =  document.createDocumentFragment();
+          // const container =  document.createDocumentFragment();
+          const container = document.createElement('div');
           new element.tag(container, element.props);
           return container;
         } else {
