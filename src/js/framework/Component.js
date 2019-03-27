@@ -48,18 +48,17 @@ export default class Component {
     } else {
       if (element.tag) {
         if (typeof element.tag === 'function') {
-          // const container =  document.createDocumentFragment();
           const container = document.createElement('div');
           new element.tag(container, element.props);
           return container;
         } else {
           const container = document.createElement(element.tag);
           
-          if (element.content) {
+          if (element.content !== undefined) {
             container.innerHTML = element.content;
           }
 
-          ['classList', 'attributes', 'children', 'eventHandler'].forEach( item => {
+          ['classList', 'attributes', 'children'].forEach( item => {
             if (element[item] && !Array.isArray(element[item])) {
               element[item] = [ element[item] ];
             }
@@ -75,9 +74,9 @@ export default class Component {
             });
           }
 
-          if (element.eventHandler) {
-            element.eventHandler.forEach( item => {
-              container.addEventListener(item.eventType, item.hadler);
+          if (element.eventHandlers) {
+            Object.keys(element.eventHandlers).forEach(evetType => {
+              container.addEventListener(evetType, element.eventHandlers[evetType]);
             });
           }
 
