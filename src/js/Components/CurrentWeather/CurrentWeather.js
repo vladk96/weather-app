@@ -21,7 +21,6 @@ export default class CurrentWeather extends Component {
     if (this.state.currentWeather === undefined) {
       return '';
     } else {
-    console.log('good');
     return [
       {
         tag: 'section',

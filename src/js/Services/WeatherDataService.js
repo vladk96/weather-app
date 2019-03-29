@@ -1,28 +1,35 @@
 import { convertPlessure } from '../utils/helpers';
+import { throws } from 'assert';
 
 const APPID = 'e3a8c8fab93d721b4390d12789fa204b';
-const UNITS = {
-  imperial: 'imperial',
-  metric: 'metric',
-};
+
 const DAY_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 class WeatherDataService {
   
-  getCurrentWeather(cityName) {
-    return fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=${UNITS.metric}&APPID=${APPID}`)
+  getCurrentWeather(cityName, unit) {
+    return fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=${unit}&APPID=${APPID}`)
       .then(result => result.json())
       .then(this._normalizeResponseData);
   }
 
-  getWeatherForecast(cityName) {
-    return fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=${UNITS.metric}&APPID=${APPID}`)
+  getWeatherForecast(cityName, unit) {
+    return fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=${unit}&APPID=${APPID}`)
       .then(result => result.json())
       .then(this._getForecastDays);
   }
 
+  getAllWeather(cityName, unit) {
+    return Promise.all([this.getCurrentWeather(cityName, unit), this.getWeatherForecast(cityName, unit)])
+      .then(data => {
+        return {
+          currentData: data[0],
+          forecastData: data[1],
+        };
+      });
+  }
+
   _normalizeResponseData(data) {
-    console.log(data);
     return {
       name: data.name,
       country: data.sys.country,

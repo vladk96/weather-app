@@ -12,8 +12,12 @@ export default class SearchBar extends Component {
   }
 
   init() {
-    ['searchCity', 'updateMyself']
+    ['searchCity', 'changeUnit', 'updateMyself']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
+    
+    this.state = {
+      unit: 'metric',
+    };
   }
 
   updateMyself(subState) {
@@ -24,28 +28,38 @@ export default class SearchBar extends Component {
     const ENTER_KEY_CODE = 13;
 
     if (event.keyCode === ENTER_KEY_CODE) {
-
       WeatherDataService
-      .getCurrentWeather(target.value)
-      .then(currentData => {
-
-        WeatherDataService
-          .getWeatherForecast(target.value)
-          .then(forecastData => {
-
-            AppState.update('CHANGECITY', {
-              currentWeather: currentData,
-              weatherImage: weatherImages[ toCamelCase(currentData.mainDesc) ],
-              weatherForecast: forecastData,
-            });
-
+        .getAllWeather(target.value, this.state.unit)
+        .then(data => {
+          AppState.update('CHANGECITY', {
+            cityName: target.value,
+            currentWeather: data.currentData,
+            weatherImage: weatherImages[ toCamelCase(data.currentData.mainDesc) ],
+            weatherForecast: data.forecastData,
           });
-      })
-      .catch(() => { 
-        alert('Incorrect city name. Try again'); // Prettify it in future
-      });
-
+        });
     }
+  }
+
+  changeUnit({ target }) {
+    const currentUnit = target.value;
+
+    if (this.state.cityName) {
+      WeatherDataService
+        .getAllWeather(this.state.cityName, currentUnit)
+        .then(data => {
+          AppState.update('CHANGECITY', {
+            currentWeather: data.currentData,
+            weatherForecast: data.forecastData,
+            unit: currentUnit,
+          });
+        });
+    } else {
+      AppState.update('CHANGECITY', {
+        unit: currentUnit,
+      });
+    }
+
   }
   
   render() {
@@ -74,6 +88,9 @@ export default class SearchBar extends Component {
           {
             tag: 'select',
             classList: ['units'],
+            eventHandlers: {
+              change: this.changeUnit,
+            },
             attributes: [
               {
                 name: 'name',
@@ -91,7 +108,7 @@ export default class SearchBar extends Component {
                 attributes: [
                   {
                     name: 'value',
-                    value: 'celsius',
+                    value: 'metric',
                   },
                 ],
               },
@@ -101,8 +118,14 @@ export default class SearchBar extends Component {
                 attributes: [
                   {
                     name: 'value',
-                    value: 'fahrenheit',
+                    value: 'imperial',
                   },
+                  (this.state.unit === 'imperial') ?  
+                  {
+                    name: 'selected',
+                    value: 'true',
+                  }
+                  : {},
                 ],
               },
             ],
