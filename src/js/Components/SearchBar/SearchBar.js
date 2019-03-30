@@ -36,11 +36,11 @@ export default class SearchBar extends Component {
 
           if (this.state.historyCitiesJSON !== null) {
             historyArray = JSON.parse(this.state.historyCitiesJSON);
-            historyArray.push(target.value);
+            historyArray.push(`${data.currentData.name}, ${data.currentData.country}`);
 
             localStorage.setItem('historyCities', JSON.stringify(historyArray));
           } else {
-            historyArray = [ target.value ];
+            historyArray = [ `${data.currentData.name}, ${data.currentData.country}` ];
             localStorage.setItem('historyCities', JSON.stringify(historyArray));
           }
 
