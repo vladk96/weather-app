@@ -25,6 +25,14 @@ export default class SearchBar extends Component {
     this.updateState(subState);
   }
 
+  getUpdatedHistoryCitiesJSON(cityStateJSON, city, country) {
+    let historyArray = JSON.parse(cityStateJSON) || [];
+
+    historyArray.unshift(`${city}, ${country}`);
+
+    return JSON.stringify(historyArray);
+  }
+
   searchCity({ target }) {
     const ENTER_KEY_CODE = 13;
 
@@ -32,24 +40,16 @@ export default class SearchBar extends Component {
       WeatherDataService
         .getAllWeather(target.value, this.state.unit)
         .then(data => {
-          let historyArray;
-
-          if (this.state.historyCitiesJSON !== null) {
-            historyArray = JSON.parse(this.state.historyCitiesJSON);
-            historyArray.push(`${data.currentData.name}, ${data.currentData.country}`);
-
-            localStorage.setItem('historyCities', JSON.stringify(historyArray));
-          } else {
-            historyArray = [ `${data.currentData.name}, ${data.currentData.country}` ];
-            localStorage.setItem('historyCities', JSON.stringify(historyArray));
-          }
-
+          const updatedHistory = this.getUpdatedHistoryCitiesJSON(this.state.historyCitiesJSON, data.currentData.name, data.currentData.country);
+          
+          localStorage.setItem('historyCities', updatedHistory);
+          
           AppState.update('CHANGECITY', {
             cityName: target.value,
             currentWeather: data.currentData,
             weatherImage: weatherImages[ toCamelCase(data.currentData.mainDesc) ],
             weatherForecast: data.forecastData,
-            historyCitiesJSON: JSON.stringify(historyArray),
+            historyCitiesJSON: updatedHistory,
           });
         })
         .catch(() => {
@@ -80,7 +80,6 @@ export default class SearchBar extends Component {
   }
   
   render() {
-    console.log(this.state);
     return [
       {
         tag: 'section',

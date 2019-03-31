@@ -29,7 +29,6 @@ export default class SearchHistory extends Component {
   }
 
   render() {
-    console.log(this.state);
     if (this.state.historyCitiesJSON !== null) {
       return [
         {
