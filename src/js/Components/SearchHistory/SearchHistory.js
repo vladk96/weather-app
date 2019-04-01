@@ -13,7 +13,7 @@ export default class SearchHistory extends Component {
     .forEach(methodName => this[methodName] = this[methodName].bind(this));
 
     this.state = {
-      historyCitiesJSON: localStorage.getItem('historyCities'),
+      historyCities: JSON.parse(localStorage.getItem('historyCities')) || [],
     };
   }
 
@@ -24,12 +24,12 @@ export default class SearchHistory extends Component {
   cleanAllHistory() {
     localStorage.removeItem('historyCities');
     AppState.update('CHANGECITY', {
-      historyCitiesJSON: null,
+      historyCities: [],
     });
   }
 
   render() {
-    if (this.state.historyCitiesJSON !== null) {
+    if (this.state.historyCities.length !== 0) {
       return [
         {
           tag: 'section',
@@ -41,7 +41,7 @@ export default class SearchHistory extends Component {
               children: [
                 {
                   tag: 'h2',
-                  content: 'Recently viewed',
+                  content: 'Last 10 viewed cities',
                   classList: ['list-title'],
                 },
                 {
@@ -67,13 +67,10 @@ export default class SearchHistory extends Component {
             },
             {
               tag: 'ul',
-              children: (this.state.historyCitiesJSON !== null) ?
-                JSON.parse(this.state.historyCitiesJSON).map( cityName => {
-                  return {
-                    tag: 'li',
-                    content: `${cityName}`,
-                  };
-                }) : [],
+              children: this.state.historyCities.map( cityName => ({
+                tag: 'li',
+                content: `${cityName}`,
+              })),
             },
           ],
         },

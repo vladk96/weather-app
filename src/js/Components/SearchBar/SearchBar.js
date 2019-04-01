@@ -17,7 +17,7 @@ export default class SearchBar extends Component {
     
     this.state = {
       unit: 'metric',
-      historyCitiesJSON: localStorage.getItem('historyCities'),
+      historyCities: JSON.parse(localStorage.getItem('historyCities')) || [],
     };
   }
 
@@ -25,12 +25,20 @@ export default class SearchBar extends Component {
     this.updateState(subState);
   }
 
-  getUpdatedHistoryCitiesJSON(cityStateJSON, city, country) {
-    let historyArray = JSON.parse(cityStateJSON) || [];
+  getUpdatedHistoryCities(cityState, city, country) {
+    let historyArray = [...cityState];
+    const formatedCity = `${city}, ${country}`;
+    const indexSearchedCity = historyArray.findIndex(historyCity => historyCity === formatedCity);
 
-    historyArray.unshift(`${city}, ${country}`);
+    if (indexSearchedCity !== -1) {
+      historyArray.splice(indexSearchedCity, 1);
+    }
+    historyArray.unshift(formatedCity);
 
-    return JSON.stringify(historyArray);
+    if (historyArray.length > 10) {
+      historyArray.pop();
+    }
+    return historyArray;
   }
 
   searchCity({ target }) {
@@ -40,16 +48,15 @@ export default class SearchBar extends Component {
       WeatherDataService
         .getAllWeather(target.value, this.state.unit)
         .then(data => {
-          const updatedHistory = this.getUpdatedHistoryCitiesJSON(this.state.historyCitiesJSON, data.currentData.name, data.currentData.country);
-          
-          localStorage.setItem('historyCities', updatedHistory);
+          const updatedHistoryArray = this.getUpdatedHistoryCities(this.state.historyCities, data.currentData.name, data.currentData.country);
+          localStorage.setItem('historyCities', JSON.stringify(updatedHistoryArray));
           
           AppState.update('CHANGECITY', {
             cityName: target.value,
             currentWeather: data.currentData,
             weatherImage: weatherImages[ toCamelCase(data.currentData.mainDesc) ],
             weatherForecast: data.forecastData,
-            historyCitiesJSON: updatedHistory,
+            historyCities: updatedHistoryArray,
           });
         })
         .catch(() => {
