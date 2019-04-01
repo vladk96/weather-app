@@ -97,7 +97,7 @@ export default class CurrentWeather extends Component {
             children: [
               {
                 tag: 'p',
-                content: `Wind speed: ${this.state.currentWeather.wind} mps`, // props
+                content: `Wind speed: ${this.state.currentWeather.wind} ` + (this.state.unit === 'imperial' ? `mph` : `m/s`), // props
                 classList: ['wind-speed'],
               },
               {
