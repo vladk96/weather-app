@@ -46,10 +46,16 @@ export default class CurrentWeather extends Component {
       return '';
     } else {
 
-      const iconStarType = 
+      const iconStar = 
       (this.state.favoriteCities
         .includes(`${this.state.currentWeather.name}, ${this.state.currentWeather.country}`)) ?
-      ['icon-star'] : ['icon-star-outlined'];
+      {
+        title: 'Remove from favorites',
+        class: ['icon-star'],
+      } : {
+        title:'Add to favorites',
+        class: ['icon-star-outlined'],
+      };
 
       return [
         {
@@ -79,15 +85,17 @@ export default class CurrentWeather extends Component {
                           name: 'type',
                           value: 'button',
                         },
-                        {
-                          name: 'title',
-                          value: 'Add to favorites'
-                        },
                       ],
                       children: [
                         {
                           tag: 'span',
-                          classList: iconStarType,
+                          classList: iconStar.class,
+                          attributes: [
+                            {
+                              name: 'title',
+                              value: iconStar.title,
+                            },
+                          ],
                         },
                       ],
                     },
