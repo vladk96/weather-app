@@ -1,10 +1,23 @@
+// .lists {
+//   display: flex;
+//   margin-top: $component-ver-indent;
+// }
+
+//this thrick will be removed later
+
 .lists {
-  display: flex;
   margin-top: $component-ver-indent;
 }
 
-.list {
+.lists > div {
+  display: inline-block;
+  vertical-align: top;
   width: 50%;
+}
+
+.list {
+  // width: 50%;
+  padding-bottom: 3px;
   background-color: $component-back-color;
   border-radius: $component-radius;
 }
