@@ -50,11 +50,38 @@
 }
 
 .favorite-list{ 
-  margin-right: $component-hor-indent;
+  margin-left: $component-hor-indent;
+}
+
+.favorite-list li {
+  position: relative;
+  margin-right: 15px;
+}
+
+.favorite-list-button {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  top: 6px;
+  right: 0;
+  font-size: 1rem;
+  color: #4b5d6a;
+  cursor: pointer;
+}
+
+.favorite-list-button:hover {
+  color: #f44336;
 }
 
 .viewed-list {
-  margin-left: $component-hor-indent;
+  margin-right: $component-hor-indent;
+}
+
+.viewed-list li {
+  margin-right: 15px;
 }
 
 .list ul {
