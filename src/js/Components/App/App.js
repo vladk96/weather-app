@@ -16,8 +16,11 @@ export default class App extends Component {
         tag: 'div',
         classList: ['app-content'],
         children: [
-          { tag: SearchBar },
-          { tag: CurrentWeather,
+          { 
+            tag: SearchBar,
+          },
+          { 
+            tag: CurrentWeather,
           },
           { 
             tag: WeatherForecast,
@@ -27,39 +30,10 @@ export default class App extends Component {
             classList: ['lists'],
             children: [
               {
-                tag: FavouriteLocations,
-                props: {
-                  favoriteCities: [
-                    {
-                      location: 'Zhytomyr, Zhytomyr Oblast, Ukraine, 10000',
-                    },
-                    {
-                      location: 'Kyiv, Ukraine, 02000',
-                    },
-                    {
-                      location: 'Redmond, WA, USA',
-                    },
-                    {
-                      location: 'Kyiv, Ukraine, 02000',
-                    },
-                  ],
-                },
+                tag: SearchHistory,
               },
               {
-                tag: SearchHistory,
-                props: {
-                  historyCities: [
-                    {
-                      location: 'Redmond, WA, USA',
-                    },
-                    {
-                      location: 'Kyiv, Ukraine, 02000',
-                    },
-                    {
-                      location: 'Zhytomyr, Zhytomyr Oblast, Ukraine, 10000',
-                    },
-                  ],
-                },
+                tag: FavouriteLocations,
               },
             ],
           },
