@@ -9,7 +9,7 @@ export default class FavouriteLocations extends Component {
   }
 
   init() {
-    ['updateMyself']
+    ['updateMyself', 'removeCity']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
     
     this.state = {
@@ -20,6 +20,18 @@ export default class FavouriteLocations extends Component {
   updateMyself(subState) {
     this.updateState(subState);
     
+  }
+
+  removeCity(event) {
+    const cityIndex = event.target.offsetParent.dataset.id;
+    const changefavoriteCities = [...this.state.favoriteCities];
+
+    changefavoriteCities.splice(cityIndex, 1);
+    localStorage.setItem('favoriteCities', JSON.stringify(changefavoriteCities));
+    
+    AppState.update('CHANGECITY', {
+      favoriteCities: changefavoriteCities,
+    });
   }
 
   cleanAllFavorites() {
@@ -42,7 +54,7 @@ export default class FavouriteLocations extends Component {
               children: [
                 {
                   tag: 'h2',
-                  content: 'Favorite',
+                  content: 'Favorite cities',
                   classList: ['list-title'],
                 },
                 {
@@ -68,10 +80,31 @@ export default class FavouriteLocations extends Component {
             },
             {
               tag: 'ul',
-              children: this.state.favoriteCities.map(city => {
+              children: this.state.favoriteCities.map((city, index) => {
                 return {
                   tag: 'li',
                   content: `${city}`,
+                  children: [
+                    {
+                      tag: 'button',
+                      attributes: [
+                        {
+                          name: 'data-id',
+                          value: index,
+                        }
+                      ],
+                      classList: ['favorite-list-button'],
+                      eventHandlers: {
+                        click: this.removeCity,
+                      },
+                      children: [
+                        {
+                          tag: 'span',
+                          classList: ['icon-close'],
+                        },
+                      ],
+                    },
+                  ],
                 };
               }), //props
             },
