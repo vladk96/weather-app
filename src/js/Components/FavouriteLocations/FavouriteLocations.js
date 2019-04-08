@@ -16,6 +16,7 @@ export default class FavouriteLocations extends Component {
     this.state = {
       unit: 'metric',
       favoriteCities: JSON.parse(localStorage.getItem('favoriteCities')) || [],
+      historyCities: JSON.parse(localStorage.getItem('historyCities')) || [],
     };
   }
 
@@ -50,17 +51,20 @@ export default class FavouriteLocations extends Component {
      WeatherDataService
       .getAllWeather(cityName, this.state.unit)
       .then(data => {
-        let favoriteCities = [...this.state.favoriteCities];
-        const cityIndex = favoriteCities.findIndex( city => city === cityName);
+        let historyCities = [...this.state.historyCities];
+        const cityIndex = historyCities.findIndex( city => city === cityName);
 
-        favoriteCities.splice(cityIndex, 1);
-        favoriteCities.unshift(cityName);
+        if (cityIndex !== -1) {
+          historyCities.splice(cityIndex, 1);
+        }
+        
+        historyCities.unshift(cityName);
         
         AppState.update('CHANGECITY', {
           cityName: cityName,
           currentWeather: data.currentData,
           weatherForecast: data.forecastData,
-          favoriteCities: favoriteCities,
+          historyCities: historyCities,
         });
       }); 
     }
