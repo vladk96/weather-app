@@ -1,5 +1,4 @@
 import { convertPlessure } from '../utils/helpers';
-import { throws } from 'assert';
 
 const APPID = 'e3a8c8fab93d721b4390d12789fa204b';
 
@@ -44,6 +43,10 @@ class WeatherDataService {
   }
 
   _getForecastDays(data) {
+    const cityName = {
+      name: data.city.name,
+      country: data.city.country,
+    };
     return data.list.filter( item => {
       const hours = new Date(item.dt * 1000).getUTCHours();
       return hours === 12;
@@ -51,7 +54,17 @@ class WeatherDataService {
     .map(day => {
       return {
         day: DAY_OF_WEEK[ new Date(day.dt * 1000).getUTCDay() ],
-        temp: Math.round(day.main.temp),
+        weather: {
+          country: cityName.country,
+          date: new Intl.DateTimeFormat('en-GB').format(new Date(day.dt * 1000)),
+          desc: day.weather[0].description,
+          humidity: day.main.humidity,
+          mainDesc: day.weather[0].main,
+          name: cityName.name,
+          pressure: Math.round(convertPlessure(day.main.pressure)),
+          wind: day.wind.speed,
+          temp: Math.round(day.main.temp),
+        },
       };
     })
   }

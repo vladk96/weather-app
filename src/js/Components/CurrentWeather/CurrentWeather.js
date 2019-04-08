@@ -1,5 +1,7 @@
 import Component from '../../framework/Component';
 import AppState from '../../Services/AppState';
+import {weatherImages} from '../../images';
+import { toCamelCase } from '../../utils/helpers';
 
 export default class CurrentWeather extends Component {
   constructor(host, props) {
@@ -120,7 +122,7 @@ export default class CurrentWeather extends Component {
                       attributes: [
                         {
                           name: 'src',
-                          value: this.state.weatherImage, // props
+                          value: weatherImages[ toCamelCase(this.state.currentWeather.mainDesc) ],
                         },
                         {
                           name: 'alt',

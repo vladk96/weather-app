@@ -1,8 +1,6 @@
 import Component from "../../framework/Component";
 import AppState from '../../Services/AppState';
 import WeatherDataService from '../../Services/WeatherDataService';
-import { weatherImages } from '../../images';
-import { toCamelCase } from '../../utils/helpers';
 
 export default class SearchBar extends Component {
   constructor(host, props) {
@@ -54,7 +52,6 @@ export default class SearchBar extends Component {
           AppState.update('CHANGECITY', {
             cityName: target.value,
             currentWeather: data.currentData,
-            weatherImage: weatherImages[ toCamelCase(data.currentData.mainDesc) ],
             weatherForecast: data.forecastData,
             historyCities: updatedHistoryArray,
           });
