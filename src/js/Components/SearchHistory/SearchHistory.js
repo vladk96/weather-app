@@ -1,5 +1,6 @@
 import Component from '../../framework/Component';
 import AppState from '../../Services/AppState';
+import WeatherDataService from '../../Services/WeatherDataService';
 
 export default class SearchHistory extends Component {
   constructor(host, props) {
@@ -9,16 +10,38 @@ export default class SearchHistory extends Component {
   }
 
   init() {
-    ['cleanAllHistory', 'updateMyself']
+    ['cleanAllHistory', 'updateMyself', 'showCityWeather']
     .forEach(methodName => this[methodName] = this[methodName].bind(this));
 
     this.state = {
+      unit: 'metric',
       historyCities: JSON.parse(localStorage.getItem('historyCities')) || [],
     };
   }
 
   updateMyself(subState) {
     this.updateState(subState);
+  }
+
+  showCityWeather(event) {
+    const cityName = event.target.innerText;
+
+    WeatherDataService
+      .getAllWeather(cityName, this.state.unit)
+      .then(data => {
+        let historyCity = [...this.state.historyCities];
+        const cityIndex = historyCity.findIndex( city => city === cityName);
+
+        historyCity.splice(cityIndex, 1);
+        historyCity.unshift(cityName);
+        
+        AppState.update('CHANGECITY', {
+          cityName: cityName,
+          currentWeather: data.currentData,
+          weatherForecast: data.forecastData,
+          historyCities: historyCity,
+        });
+      });
   }
   
   cleanAllHistory() {
@@ -69,6 +92,9 @@ export default class SearchHistory extends Component {
               tag: 'ul',
               children: this.state.historyCities.map( cityName => ({
                 tag: 'li',
+                eventHandlers: {
+                  click: this.showCityWeather,
+                },
                 content: `${cityName}`,
               })),
             },
