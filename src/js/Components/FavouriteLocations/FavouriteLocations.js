@@ -1,5 +1,6 @@
 import Component from '../../framework/Component';
 import AppState from '../../Services/AppState';
+import WeatherDataService from '../../Services/WeatherDataService';
 
 export default class FavouriteLocations extends Component {
   constructor(host, props) {
@@ -9,10 +10,11 @@ export default class FavouriteLocations extends Component {
   }
 
   init() {
-    ['updateMyself', 'removeCity']
+    ['updateMyself', 'removeCity', 'showCityWeather']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
     
     this.state = {
+      unit: 'metric',
       favoriteCities: JSON.parse(localStorage.getItem('favoriteCities')) || [],
     };
   }
@@ -39,6 +41,30 @@ export default class FavouriteLocations extends Component {
     AppState.update('CHANGECITY', {
       favoriteCities: [],
     });
+  }
+
+  showCityWeather(event) {
+    const cityName = event.target.innerText;
+
+    if (event.target.tagName === 'LI') {
+     WeatherDataService
+      .getAllWeather(cityName, this.state.unit)
+      .then(data => {
+        let favoriteCities = [...this.state.favoriteCities];
+        const cityIndex = favoriteCities.findIndex( city => city === cityName);
+
+        favoriteCities.splice(cityIndex, 1);
+        favoriteCities.unshift(cityName);
+        
+        AppState.update('CHANGECITY', {
+          cityName: cityName,
+          currentWeather: data.currentData,
+          weatherForecast: data.forecastData,
+          favoriteCities: favoriteCities,
+        });
+      }); 
+    }
+    
   }
   
   render() {
@@ -84,6 +110,9 @@ export default class FavouriteLocations extends Component {
                 return {
                   tag: 'li',
                   content: `${city}`,
+                  eventHandlers: {
+                    click: this.showCityWeather,
+                  },
                   children: [
                     {
                       tag: 'button',
