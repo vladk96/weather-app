@@ -9,20 +9,21 @@ export default class WeatherForecastItem extends Component {
   }
 
   init() {
-    ['showWeather', 'updateMyself']
-      .forEach(methodName => this[methodName] = this[methodName].bind(this));
+    ['showWeather', 'updateMyself'].forEach(
+      methodName => (this[methodName] = this[methodName].bind(this))
+    );
   }
 
   updateMyself(subState) {
     this.updateState(subState);
   }
-  
+
   showWeather() {
     AppState.update('CHANGECITY', {
       currentWeather: this.props.weather,
     });
   }
-  
+
   render() {
     return [
       {

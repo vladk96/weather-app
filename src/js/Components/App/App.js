@@ -9,8 +9,8 @@ export default class App extends Component {
   constructor(host, props) {
     super(host, props);
   }
-  
-  render(){
+
+  render() {
     return [
       {
         tag: 'div',

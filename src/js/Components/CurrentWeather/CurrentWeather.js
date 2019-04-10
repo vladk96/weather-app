@@ -1,19 +1,20 @@
 import Component from '../../framework/Component';
 import AppState from '../../Services/AppState';
-import {weatherImages} from '../../images';
+import { weatherImages } from '../../images';
 import { toCamelCase } from '../../utils/helpers';
 
 export default class CurrentWeather extends Component {
   constructor(host, props) {
     super(host, props);
-    
+
     AppState.watch('CHANGECITY', this.updateMyself);
   }
-  
+
   init() {
-    ['addToFavoriteList', 'updateMyself']
-      .forEach(methodName => this[methodName] = this[methodName].bind(this));
-    
+    ['addToFavoriteList', 'updateMyself'].forEach(
+      methodName => (this[methodName] = this[methodName].bind(this))
+    );
+
     this.state = {
       favoriteCities: JSON.parse(localStorage.getItem('favoriteCities')) || [],
     };
@@ -21,11 +22,10 @@ export default class CurrentWeather extends Component {
 
   updateMyself(subState) {
     this.updateState(subState);
-    
   }
 
   addToFavoriteList() {
-    let favoriteArray = [...this.state.favoriteCities];
+    const favoriteArray = [...this.state.favoriteCities];
     const formatedCity = `${this.state.currentWeather.name}, ${this.state.currentWeather.country}`;
     const indexSearchedCity = favoriteArray.findIndex(favoriteCity => favoriteCity === formatedCity);
 
@@ -47,7 +47,6 @@ export default class CurrentWeather extends Component {
     if (this.state.currentWeather === undefined) {
       return '';
     } else {
-
       const iconStar = 
       (this.state.favoriteCities
         .includes(`${this.state.currentWeather.name}, ${this.state.currentWeather.country}`)) ?

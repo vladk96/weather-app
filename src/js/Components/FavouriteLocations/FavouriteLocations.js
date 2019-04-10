@@ -10,9 +10,10 @@ export default class FavouriteLocations extends Component {
   }
 
   init() {
-    ['updateMyself', 'removeCity', 'showCityWeather']
-      .forEach(methodName => this[methodName] = this[methodName].bind(this));
-    
+    ['updateMyself', 'removeCity', 'showCityWeather'].forEach(
+      methodName => (this[methodName] = this[methodName].bind(this))
+    );
+
     this.state = {
       unit: 'metric',
       favoriteCities: JSON.parse(localStorage.getItem('favoriteCities')) || [],
@@ -22,7 +23,6 @@ export default class FavouriteLocations extends Component {
 
   updateMyself(subState) {
     this.updateState(subState);
-    
   }
 
   removeCity(event) {
@@ -31,7 +31,7 @@ export default class FavouriteLocations extends Component {
 
     changefavoriteCities.splice(cityIndex, 1);
     localStorage.setItem('favoriteCities', JSON.stringify(changefavoriteCities));
-    
+
     AppState.update('CHANGECITY', {
       favoriteCities: changefavoriteCities,
     });
@@ -39,6 +39,7 @@ export default class FavouriteLocations extends Component {
 
   cleanAllFavorites() {
     localStorage.removeItem('favoriteCities');
+
     AppState.update('CHANGECITY', {
       favoriteCities: [],
     });
@@ -51,7 +52,7 @@ export default class FavouriteLocations extends Component {
      WeatherDataService
       .getAllWeather(cityName, this.state.unit)
       .then(data => {
-        let historyCities = [...this.state.historyCities];
+        const historyCities = [...this.state.historyCities];
         const cityIndex = historyCities.findIndex( city => city === cityName);
 
         if (cityIndex !== -1) {
@@ -139,7 +140,7 @@ export default class FavouriteLocations extends Component {
                     },
                   ],
                 };
-              }), //props
+              }),
             },
           ],
         },

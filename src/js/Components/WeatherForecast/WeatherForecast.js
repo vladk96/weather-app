@@ -16,7 +16,7 @@ export default class WeatherForecast extends Component {
   updateMyself(subState) {
     this.updateState(subState);
   }
-  
+
   render() {
     if (this.state.weatherForecast === undefined) {
       return '';

@@ -10,8 +10,9 @@ export default class SearchHistory extends Component {
   }
 
   init() {
-    ['cleanAllHistory', 'updateMyself', 'showCityWeather']
-    .forEach(methodName => this[methodName] = this[methodName].bind(this));
+    ['cleanAllHistory', 'updateMyself', 'showCityWeather'].forEach(
+      methodName => (this[methodName] = this[methodName].bind(this))
+    );
 
     this.state = {
       unit: 'metric',
@@ -29,7 +30,7 @@ export default class SearchHistory extends Component {
     WeatherDataService
       .getAllWeather(cityName, this.state.unit)
       .then(data => {
-        let historyCity = [...this.state.historyCities];
+        const historyCity = [...this.state.historyCities];
         const cityIndex = historyCity.findIndex( city => city === cityName);
 
         historyCity.splice(cityIndex, 1);

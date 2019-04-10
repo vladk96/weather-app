@@ -1,5 +1,5 @@
 export default class Component {
-  constructor(host, props = {}){
+  constructor(host, props = {}) {
     this.host = host;
     this.props = props;
     this.state = {};
@@ -7,29 +7,29 @@ export default class Component {
     this._render();
   }
 
-  init() {
-  }
+  init() {}
 
   updateState(stateDelta) {
-    this.state = Object.assign( {}, this.state, stateDelta );
+    this.state = Object.assign({}, this.state, stateDelta);
     this._render();
   }
 
-  _render(){
+  _render() {
     this.host.innerHTML = '';
     let content = this.render();
 
     if (!Array.isArray(content)) {
-      content = [ content ];
+      content = [content];
     }
 
-    content.map( item => this._vDomPrototypeElementToHTMLElement(item))
+    content
+      .map(item => this._vDomPrototypeElementToHTMLElement(item))
       .forEach(htmlElement => {
         this.host.appendChild(htmlElement);
       });
   }
 
-  render () {
+  render() {
     return 'Nothing';
   }
 

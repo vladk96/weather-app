@@ -6,13 +6,18 @@ import { CITIES } from '../../utils/city-list';
 export default class SearchBar extends Component {
   constructor(host, props) {
     super(host, props);
-    
+
     AppState.watch('CHANGECITY', this.updateMyself);
   }
 
   init() {
-    ['searchCity', 'changeUnit', 'updateMyself', 'showAutocomplete', 'onClick']
-      .forEach(methodName => this[methodName] = this[methodName].bind(this));
+    [
+      'searchCity',
+      'changeUnit',
+      'updateMyself',
+      'showAutocomplete',
+      'onClick'
+    ].forEach(methodName => this[methodName] = this[methodName].bind(this));
     
     this.state = {
       unit: 'metric',
@@ -25,7 +30,7 @@ export default class SearchBar extends Component {
   }
 
   getUpdatedHistoryCities(cityState, city, country) {
-    let historyArray = [...cityState];
+    const historyArray = [...cityState];
     const formatedCity = `${city}, ${country}`;
     const indexSearchedCity = historyArray.findIndex(historyCity => historyCity === formatedCity);
 
@@ -40,18 +45,18 @@ export default class SearchBar extends Component {
     return historyArray;
   }
 
-  searchCity({ target }) {
+  searchCity(event) {
     const ENTER_KEY_CODE = 13;
 
     if (event.keyCode === ENTER_KEY_CODE) {
       WeatherDataService
-        .getAllWeather(target.value, this.state.unit)
+        .getAllWeather(event.target.value, this.state.unit)
         .then(data => {
           const updatedHistoryArray = this.getUpdatedHistoryCities(this.state.historyCities, data.currentData.name, data.currentData.country);
           localStorage.setItem('historyCities', JSON.stringify(updatedHistoryArray));
           
           AppState.update('CHANGECITY', {
-            cityName: target.value,
+            cityName: event.target.value,
             currentWeather: data.currentData,
             weatherForecast: data.forecastData,
             historyCities: updatedHistoryArray,
@@ -64,9 +69,9 @@ export default class SearchBar extends Component {
   }
 
   showAutocomplete(event) {
-    let searchContainer = event.srcElement.parentElement;
-    let searchInput = event.target;
-    let ul = document.createElement('ul');
+    const searchContainer = event.srcElement.parentElement;
+    const searchInput = event.target;
+    const ul = document.createElement('ul');
 
     const userCity = event.target.value;
     const filteredCities = CITIES.filter(city => {
@@ -75,7 +80,7 @@ export default class SearchBar extends Component {
     });
 
     ul.classList.add('autocomplete');
-    console.log()
+
     if (searchContainer.lastChild.className === 'autocomplete') {
       document.querySelector('.autocomplete').remove();
       searchInput.classList.remove('search-input-remove-border-radius');
@@ -111,7 +116,7 @@ export default class SearchBar extends Component {
         weatherForecast: data.forecastData,
         historyCities: updatedHistoryArray,
       });
-    })
+    });
   }
 
   changeUnit({ target }) {
