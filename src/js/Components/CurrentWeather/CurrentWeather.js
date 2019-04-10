@@ -1,6 +1,6 @@
 import Component from '../../framework/Component';
 import AppState from '../../Services/AppState';
-import { weatherImages } from '../../images';
+import { weatherImages } from '../../utils/images';
 import { toCamelCase } from '../../utils/helpers';
 
 export default class CurrentWeather extends Component {
