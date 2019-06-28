@@ -27,7 +27,7 @@ This project uses [Parcel bundler](https://github.com/parcel-bundler/parcel). Fi
 npm install -g parcel-bundler / yarn global add parcel-bundler
 ```
 
-Then, clone this repo and install some dependecies.
+Then, clone this repo and install some dependencies.
 
 ```
 git clone https://github.com/vladk96/weather-app.git
